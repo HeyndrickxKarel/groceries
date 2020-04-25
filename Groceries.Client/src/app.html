@@ -1,0 +1,23 @@
+<template>
+  <require from="bootstrap/dist/css/bootstrap.min.css"></require>
+  <require from="./styles/style.css"></require>
+  <require from="./app.css"></require>
+  <div class="app p-1">
+    <h3>Noodschappen</h3>
+    <div
+      class="d-flex align-items-center mr-3-items"
+      repeat.for="grocery of groceries"
+    >
+      <input type="checkbox" value.bind="grocery.checked" />
+      <form role="form" submit.delegate="enterPressed()">
+        <input
+          id="grocery-input-${$index}"
+          type="text"
+          value.bind="grocery.description"
+          class="inline-input"
+          focus.trigger="focus(grocery)"
+        />
+      </form>
+    </div>
+  </div>
+</template>

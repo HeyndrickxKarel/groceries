@@ -1,0 +1,42 @@
+@import "./styles.nprogress.scss";
+
+html {
+  background-color: #fafafa;
+  font-family: "Avenir", "Raleway", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+html,
+body {
+  height: 100%;
+}
+
+.mr-3-items > * {
+  margin-right: 0.8rem !important;
+}
+.mr-3-items > *:last-child {
+  margin-right: 0rem !important;
+}
+
+.fly-in.au-enter-active {
+  animation: fly-in 0.5s;
+}
+.fly-out.au-leave-active {
+  animation: fly-in 0.5s reverse;
+}
+
+@keyframes fly-in {
+  0% {
+    transform: scale(0.97);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
