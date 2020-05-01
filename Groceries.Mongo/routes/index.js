@@ -3,54 +3,61 @@ var router = express.Router();
 let mongoose = require("mongoose");
 let Grocery = mongoose.model("Grocery");
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.send("server works");
-});
+// /* GET home page. */
+// router.get("/", function (req, res, next) {
+//   res.send("server works");
+// });
 
-router.get("/API/Groceries", function (req, res, next) {
+router.get("/api/groceries", function (req, res, next) {
   Grocery.find(function (err, groceries) {
     res.json(groceries);
   });
 });
 
-router.post("/API/CreateGrocery", (req, res, next) => {
-  req.body.modifiedOn = new Date();
-  let grocery = new Grocery(req.body);
-  grocery.save((err, rec) => {
-    if (err) return next(err);
-    res.json(rec);
-  });
+// router.post("/API/CreateGrocery", (req, res, next) => {
+//   req.body.modifiedOn = new Date();
+//   let grocery = new Grocery(req.body);
+//   grocery.save((err, rec) => {
+//     if (err) return next(err);
+//     res.json(rec);
+//   });
+// });
+
+router.post("/api/clear", async (req, res, next) => {
+  await Grocery.remove({});
+  res.send("Cleared");
 });
 
-router.post("/API/Sync", async (req, res, next) => {
+router.post("/api/sync", async (req, res, next) => {
   try {
     var groceries = req.body;
     for (groc of groceries) {
-      console.log(groc);
       switch (groc.action) {
-        case "Delete":
+        case "delete":
+          await Grocery.find({ _id: groc._id }).remove();
           break;
-        case "Add":
-          console.log("add");
+        case "add":
           groc.modifiedOn = new Date();
           var grocery = new Grocery(groc);
-          await grocery.save(function (err, rec) {});
+          await grocery.save();
           break;
-        case "Update":
+        case "update":
+          await Grocery.findByIdAndUpdate(groc._id, {
+            checked: groc.checked,
+            description: groc.description,
+          });
           break;
-        case "Nothing":
+        case "nothing":
         default:
           break;
       }
     }
   } catch {
-    res.send("failed");
+    res.send("Failed");
   }
 
-  Grocery.find(function (err, groceries) {
-    res.json(groceries);
-  });
+  const newGroceries = await Grocery.find();
+  res.json(newGroceries);
 });
 
 module.exports = router;
