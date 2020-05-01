@@ -34,7 +34,12 @@ router.post("/api/sync", async (req, res, next) => {
     for (groc of groceries) {
       switch (groc.action) {
         case "delete":
-          await Grocery.find({ _id: groc._id }).remove();
+          const gr = await Grocery.findById(groc._id);
+          const grDate = new Date(gr.modifiedOn);
+          const grocDate = new Date(groc.modifiedOn);
+          if (gr && grDate.getTime() == grocDate.getTime()) {
+            await gr.remove();
+          }
           break;
         case "add":
           groc.modifiedOn = new Date();
