@@ -1,7 +1,71 @@
 .app {
   height: 100%;
+  background: url("assets/images/bg.png");
+
   .inline-input {
     border: none !important;
     outline: none !important;
+    background-color: transparent;
+    color: #4b4b4b;
+  }
+  .sync-icon {
+    background-image: url("assets/images/sync-icon.png");
+    background-size: cover;
+    height: 24px;
+    width: 24px;
+  }
+  .rotate-sync-icon {
+    transition: 0.8s;
+    transform: rotate(360deg);
+  }
+  .delete-icon {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    top: 3px;
+    left: 110%;
+    color: #d9534f;
+  }
+  .delete-icon-inline {
+    color: #d9534f;
+  }
+  .grocery-row {
+    padding: 6px 0px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+}
+#nprogress {
+  &.p-primary {
+    .bar {
+      background-color: #428bca;
+    }
+    .peg {
+      box-shadow: 0 0 10px #428bca, 0 0 5px #428bca;
+    }
+  }
+  &.p-success {
+    .bar {
+      background-color: #5cb85c;
+    }
+    .peg {
+      box-shadow: 0 0 10px #5cb85c, 0 0 5px #5cb85c;
+    }
+  }
+  &.p-warning {
+    .bar {
+      background-color: #f0ad4e;
+    }
+    .peg {
+      box-shadow: 0 0 10px #f0ad4e, 0 0 5px #f0ad4e;
+    }
+  }
+  &.p-danger {
+    .bar {
+      background-color: #d9534f;
+    }
+    .peg {
+      box-shadow: 0 0 10px #d9534f, 0 0 5px #d9534f;
+    }
   }
 }

@@ -1,23 +1,43 @@
 <template>
   <require from="bootstrap/dist/css/bootstrap.min.css"></require>
+  <require from="pretty-checkbox/dist/pretty-checkbox.min.css"></require>
   <require from="./styles/style.css"></require>
   <require from="./app.css"></require>
-  <div class="app p-1">
-    <h3>Noodschappen</h3>
+  <require from="resources/value-converters/random-class"></require>
+  <div class="app p-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="position-relative">
+        <h3 click.delegate="toggleDeleteVisible()" class="mb-0">Noodschappen</h3>
+        <font-awesome-icon if.bind="deleteVisible" click.delegate="clear()" icon.bind="['far','trash-alt']" class="delete-icon au-animate fade-in fade-out">
+      </div>
+      <span
+        class="sync-icon ${rotateSyncIcon? 'rotate-sync-icon':''}"
+        click.delegate="sync()"
+      ></span>
+    </div>
     <div
-      class="d-flex align-items-center mr-3-items"
+      class="d-flex justify-content-between align-items-center grocery-row"
       repeat.for="grocery of groceries"
     >
-      <input type="checkbox" value.bind="grocery.checked" />
-      <form role="form" submit.delegate="enterPressed()">
-        <input
-          id="grocery-input-${$index}"
-          type="text"
-          value.bind="grocery.description"
-          class="inline-input"
-          focus.trigger="focus(grocery)"
-        />
-      </form>
+      <div class="d-flex align-items-center mr-3-items">
+        <div class="pretty p-round p-smooth">
+          <input type="checkbox" checked.bind="grocery.checked" />
+          <div class="state ${true | randomClass}">
+            <label></label>
+          </div>
+        </div>
+        <form role="form" submit.delegate="enterPressed()">
+          <input
+            id="grocery-input-${$index}"
+            type="text"
+            value.bind="grocery.description"
+            class="inline-input"
+            focus.trigger="focus(grocery)"
+          />
+        </form>
+      </div>
+      <font-awesome-icon click.delegate="delete(grocery)" icon.bind="['far','trash-alt']" class="delete-icon-inline">
+
     </div>
   </div>
 </template>

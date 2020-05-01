@@ -1,5 +1,5 @@
-import { GroceryDto } from "resources/swagger/api-client";
+import { Grocery } from "resources/mongo/models/grocery";
 
 export class AppService {
-  public currentGrocery: GroceryDto;
+  public currentGrocery: Grocery;
 }

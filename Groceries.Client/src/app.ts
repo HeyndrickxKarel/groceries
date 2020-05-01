@@ -1,22 +1,19 @@
 import { autoinject } from "aurelia-framework";
-import { GroceryClient, GroceryDto } from "resources/swagger/api-client";
 import { AppService } from "services/app-service";
 import * as $ from "jquery";
-import moment = require("moment");
+import { Grocery } from "resources/mongo/models/grocery";
+import { HttpClient, json } from "aurelia-fetch-client";
 
 @autoinject
 export class App {
-  public groceries: GroceryDto[];
+  public groceries: Grocery[];
+  public rotateSyncIcon: boolean = false;
+  public deleteVisible: boolean = false;
 
-  constructor(
-    private groceryClient: GroceryClient,
-    private appService: AppService
-  ) {}
+  constructor(private appService: AppService, private httpClient: HttpClient) {}
 
-  public attached() {
-    this.groceryClient.sync([]).then((groceries) => {
-      this.groceries = groceries;
-    });
+  public async attached() {
+    this.sync();
   }
 
   public activate() {
@@ -48,9 +45,8 @@ export class App {
       }
       const newGrocery = {
         checked: false,
-        groceryId: 0,
         description: "",
-      } as GroceryDto;
+      } as Grocery;
       let newIndex = 0;
       if (index > -1) {
         if (index + 1 == this.groceries.length) {
@@ -81,6 +77,44 @@ export class App {
         }
       }
     }
+  }
+
+  public sync() {
+    this.rotateSyncIcon = true;
+    setTimeout(() => {
+      this.rotateSyncIcon = false;
+    }, 1000);
+
+    this.httpClient
+      .fetch("/api/sync", {
+        method: "post",
+        body: json([]),
+      })
+      .then((response) => response.json())
+      .then((data) => (this.groceries = data))
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  public clear() {
+    this.httpClient
+      .fetch("/api/clear", {
+        method: "post",
+        body: null,
+      })
+      .then((response) => (this.groceries = []))
+      .catch((error) => {
+        console.log(error);
+      });
+
+    this.deleteVisible = false;
+  }
+
+  public delete(grocery) {}
+
+  public toggleDeleteVisible() {
+    this.deleteVisible = !this.deleteVisible;
   }
 
   private indexOfCurrentGrocery(grocery) {

@@ -1,15 +1,14 @@
 @import "./styles.nprogress.scss";
 
 html {
-  background-color: #fafafa;
   font-family: "Avenir", "Raleway", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
 }
 html,
 body {
   height: 100%;
+  color: #4b4b4b;
 }
 
 .mr-3-items > * {
@@ -37,6 +36,31 @@ body {
   }
   100% {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.fade-in.au-enter-active {
+  animation: fade-in 0.5s;
+}
+.fade-out.au-leave-active {
+  animation: fade-in 0.5s reverse;
+}
+
+.fade-out.aurelia-hide-add {
+  animation: fade-in 0.5s reverse;
+}
+.fade-in.aurelia-hide-remove {
+  animation: fade-in 0.5s;
+}
+
+@keyframes fade-in {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
     opacity: 1;
   }
 }

@@ -2,9 +2,17 @@ import { Aurelia } from "aurelia-framework";
 import environment from "./environment";
 import { ProgressService } from "services/progress-service";
 import { HttpClient } from "aurelia-fetch-client";
+import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
+import { PLATFORM } from "aurelia-pal";
 
 export function configure(aurelia: Aurelia) {
-  aurelia.use.standardConfiguration().feature("resources");
+  aurelia.use
+    .standardConfiguration()
+    .feature("resources")
+    .plugin(PLATFORM.moduleName("aurelia-animator-css"))
+    .feature(PLATFORM.moduleName("aurelia-fontawesome"), {
+      icons: [faTrashAlt],
+    });
 
   aurelia.use.developmentLogging(environment.debug ? "debug" : "warn");
 
@@ -15,7 +23,7 @@ export function configure(aurelia: Aurelia) {
   const httpClient = aurelia.container.get(HttpClient) as HttpClient;
 
   httpClient.configure((config) => {
-    config.withBaseUrl(environment.apiUrl);
+    config.withBaseUrl(environment.mongoUrl);
   });
 
   aurelia.start().then(() => {
@@ -27,6 +35,7 @@ export function configure(aurelia: Aurelia) {
       config.withInterceptor({
         request(req: Request) {
           progressService.makingApiCall();
+          progressService.setRandomClass();
           return req;
         },
         async response(resp: Response) {
